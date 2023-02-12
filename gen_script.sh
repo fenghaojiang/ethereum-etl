@@ -1,4 +1,8 @@
 
-abigen --abi=./abis/erc/erc20/erc20.abi --pkg=erc20 --out=./abis/erc/erc20/erc20.go
-abigen --abi=./abis/erc/erc721/erc721.abi --pkg=erc721 --out=./abis/erc/erc721/erc721.go
-abigen --abi=./abis/erc/erc1155/erc1155.abi --pkg=erc1155 --out=./abis/erc/erc1155/erc1155.go
+# find all abi file and generate go resolve file in ./onchain/generated-go directory
+for fileName in $(find ./onchain/abis/ -name "*.abi" -type f); do
+    dir="./onchain/generated-go/$(dirname "${fileName#./onchain/abis/}")"
+    mkdir -p "$dir"
+    bname="$(basename "$fileName" .abi)"
+    abigen --abi="$fileName" --pkg="$bname" --out="$dir/$bname.go"
+done
