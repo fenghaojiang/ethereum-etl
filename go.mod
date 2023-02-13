@@ -3,7 +3,9 @@ module github.com/fenghaojiang/ethereum-etl
 go 1.19
 
 require (
+	github.com/boltdb/bolt v1.3.1
 	github.com/ledgerwatch/erigon v1.9.7-0.20220620155524-7724089985bf
+	github.com/spf13/cobra v1.4.0
 	go.uber.org/zap v1.24.0
 )
 
@@ -17,6 +19,7 @@ require (
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/holiman/uint256 v1.2.1 // indirect
 	github.com/ianlancetaylor/cgosymbolizer v0.0.0-20221217025313-27d3c9f66b6a // indirect
+	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/kevinburke/go-bindata v3.24.0+incompatible // indirect
 	github.com/ledgerwatch/erigon-lib v0.0.0-20230211200854-aa2b5617412b // indirect
 	github.com/ledgerwatch/log/v3 v3.7.0 // indirect
@@ -25,6 +28,7 @@ require (
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/quasilyte/go-ruleguard/dsl v0.3.22 // indirect
+	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stretchr/testify v1.8.1 // indirect
 	github.com/torquem-ch/mdbx-go v0.28.1 // indirect
 	github.com/ugorji/go/codec v1.2.9 // indirect
@@ -39,7 +43,6 @@ require (
 	golang.org/x/mod v0.8.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/tools v0.6.0 // indirect
-	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.2.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
