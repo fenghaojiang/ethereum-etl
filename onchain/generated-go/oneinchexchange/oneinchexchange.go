@@ -4,19 +4,21 @@
 package oneinchexchange
 
 import (
+	"errors"
 	"math/big"
 	"strings"
 
-	ethereum "github.com/ledgerwatch/erigon"
-	"github.com/ledgerwatch/erigon/accounts/abi"
-	"github.com/ledgerwatch/erigon/accounts/abi/bind"
-	"github.com/ledgerwatch/erigon/common"
-	"github.com/ledgerwatch/erigon/core/types"
-	"github.com/ledgerwatch/erigon/event"
+	ethereum "github.com/ethereum/go-ethereum"
+	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/event"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
 var (
+	_ = errors.New
 	_ = big.NewInt
 	_ = strings.NewReader
 	_ = ethereum.NotFound
@@ -24,22 +26,29 @@ var (
 	_ = common.Big1
 	_ = types.BloomLookup
 	_ = event.NewSubscription
+	_ = abi.ConvertType
 )
 
 // AggregationRouterV3SwapDescription is an auto generated low-level Go binding around an user-defined struct.
 type AggregationRouterV3SwapDescription struct {
-	SrcToken        libcommon.Address
-	DstToken        libcommon.Address
-	SrcReceiver     libcommon.Address
-	DstReceiver     libcommon.Address
+	SrcToken        common.Address
+	DstToken        common.Address
+	SrcReceiver     common.Address
+	DstReceiver     common.Address
 	Amount          *big.Int
 	MinReturnAmount *big.Int
 	Flags           *big.Int
 	Permit          []byte
 }
 
+// OneinchexchangeMetaData contains all meta data concerning the Oneinchexchange contract.
+var OneinchexchangeMetaData = &bind.MetaData{
+	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"reason\",\"type\":\"string\"}],\"name\":\"Error\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"contractIERC20\",\"name\":\"srcToken\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"contractIERC20\",\"name\":\"dstToken\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"dstReceiver\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"spentAmount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"returnAmount\",\"type\":\"uint256\"}],\"name\":\"Swapped\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"destroy\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"contractIAggregationExecutor\",\"name\":\"caller\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"contractIERC20\",\"name\":\"srcToken\",\"type\":\"address\"},{\"internalType\":\"contractIERC20\",\"name\":\"dstToken\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"srcReceiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"dstReceiver\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"minReturnAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"flags\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"permit\",\"type\":\"bytes\"}],\"internalType\":\"structAggregationRouterV3.SwapDescription\",\"name\":\"desc\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"discountedSwap\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"returnAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gasLeft\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"chiSpent\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"contractIERC20\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"rescueFunds\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"contractIAggregationExecutor\",\"name\":\"caller\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"contractIERC20\",\"name\":\"srcToken\",\"type\":\"address\"},{\"internalType\":\"contractIERC20\",\"name\":\"dstToken\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"srcReceiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"dstReceiver\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"minReturnAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"flags\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"permit\",\"type\":\"bytes\"}],\"internalType\":\"structAggregationRouterV3.SwapDescription\",\"name\":\"desc\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"swap\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"returnAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gasLeft\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"contractIERC20\",\"name\":\"srcToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"minReturn\",\"type\":\"uint256\"},{\"internalType\":\"bytes32[]\",\"name\":\"\",\"type\":\"bytes32[]\"}],\"name\":\"unoswap\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"returnAmount\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"contractIERC20\",\"name\":\"srcToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"minReturn\",\"type\":\"uint256\"},{\"internalType\":\"bytes32[]\",\"name\":\"pools\",\"type\":\"bytes32[]\"},{\"internalType\":\"bytes\",\"name\":\"permit\",\"type\":\"bytes\"}],\"name\":\"unoswapWithPermit\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"returnAmount\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}]",
+}
+
 // OneinchexchangeABI is the input ABI used to generate the binding from.
-const OneinchexchangeABI = "[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"reason\",\"type\":\"string\"}],\"name\":\"Error\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"contractIERC20\",\"name\":\"srcToken\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"contractIERC20\",\"name\":\"dstToken\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"dstReceiver\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"spentAmount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"returnAmount\",\"type\":\"uint256\"}],\"name\":\"Swapped\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"destroy\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"contractIAggregationExecutor\",\"name\":\"caller\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"contractIERC20\",\"name\":\"srcToken\",\"type\":\"address\"},{\"internalType\":\"contractIERC20\",\"name\":\"dstToken\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"srcReceiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"dstReceiver\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"minReturnAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"flags\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"permit\",\"type\":\"bytes\"}],\"internalType\":\"structAggregationRouterV3.SwapDescription\",\"name\":\"desc\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"discountedSwap\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"returnAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gasLeft\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"chiSpent\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"contractIERC20\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"rescueFunds\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"contractIAggregationExecutor\",\"name\":\"caller\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"contractIERC20\",\"name\":\"srcToken\",\"type\":\"address\"},{\"internalType\":\"contractIERC20\",\"name\":\"dstToken\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"srcReceiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"dstReceiver\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"minReturnAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"flags\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"permit\",\"type\":\"bytes\"}],\"internalType\":\"structAggregationRouterV3.SwapDescription\",\"name\":\"desc\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"swap\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"returnAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gasLeft\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"contractIERC20\",\"name\":\"srcToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"minReturn\",\"type\":\"uint256\"},{\"internalType\":\"bytes32[]\",\"name\":\"\",\"type\":\"bytes32[]\"}],\"name\":\"unoswap\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"returnAmount\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"contractIERC20\",\"name\":\"srcToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"minReturn\",\"type\":\"uint256\"},{\"internalType\":\"bytes32[]\",\"name\":\"pools\",\"type\":\"bytes32[]\"},{\"internalType\":\"bytes\",\"name\":\"permit\",\"type\":\"bytes\"}],\"name\":\"unoswapWithPermit\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"returnAmount\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}]"
+// Deprecated: Use OneinchexchangeMetaData.ABI instead.
+var OneinchexchangeABI = OneinchexchangeMetaData.ABI
 
 // Oneinchexchange is an auto generated Go binding around an Ethereum contract.
 type Oneinchexchange struct {
@@ -101,7 +110,7 @@ type OneinchexchangeTransactorRaw struct {
 }
 
 // NewOneinchexchange creates a new instance of Oneinchexchange, bound to a specific deployed contract.
-func NewOneinchexchange(address libcommon.Address, backend bind.ContractBackend) (*Oneinchexchange, error) {
+func NewOneinchexchange(address common.Address, backend bind.ContractBackend) (*Oneinchexchange, error) {
 	contract, err := bindOneinchexchange(address, backend, backend, backend)
 	if err != nil {
 		return nil, err
@@ -110,7 +119,7 @@ func NewOneinchexchange(address libcommon.Address, backend bind.ContractBackend)
 }
 
 // NewOneinchexchangeCaller creates a new read-only instance of Oneinchexchange, bound to a specific deployed contract.
-func NewOneinchexchangeCaller(address libcommon.Address, caller bind.ContractCaller) (*OneinchexchangeCaller, error) {
+func NewOneinchexchangeCaller(address common.Address, caller bind.ContractCaller) (*OneinchexchangeCaller, error) {
 	contract, err := bindOneinchexchange(address, caller, nil, nil)
 	if err != nil {
 		return nil, err
@@ -119,7 +128,7 @@ func NewOneinchexchangeCaller(address libcommon.Address, caller bind.ContractCal
 }
 
 // NewOneinchexchangeTransactor creates a new write-only instance of Oneinchexchange, bound to a specific deployed contract.
-func NewOneinchexchangeTransactor(address libcommon.Address, transactor bind.ContractTransactor) (*OneinchexchangeTransactor, error) {
+func NewOneinchexchangeTransactor(address common.Address, transactor bind.ContractTransactor) (*OneinchexchangeTransactor, error) {
 	contract, err := bindOneinchexchange(address, nil, transactor, nil)
 	if err != nil {
 		return nil, err
@@ -128,7 +137,7 @@ func NewOneinchexchangeTransactor(address libcommon.Address, transactor bind.Con
 }
 
 // NewOneinchexchangeFilterer creates a new log filterer instance of Oneinchexchange, bound to a specific deployed contract.
-func NewOneinchexchangeFilterer(address libcommon.Address, filterer bind.ContractFilterer) (*OneinchexchangeFilterer, error) {
+func NewOneinchexchangeFilterer(address common.Address, filterer bind.ContractFilterer) (*OneinchexchangeFilterer, error) {
 	contract, err := bindOneinchexchange(address, nil, nil, filterer)
 	if err != nil {
 		return nil, err
@@ -137,12 +146,12 @@ func NewOneinchexchangeFilterer(address libcommon.Address, filterer bind.Contrac
 }
 
 // bindOneinchexchange binds a generic wrapper to an already deployed contract.
-func bindOneinchexchange(address libcommon.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
-	parsed, err := abi.JSON(strings.NewReader(OneinchexchangeABI))
+func bindOneinchexchange(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
+	parsed, err := OneinchexchangeMetaData.GetAbi()
 	if err != nil {
 		return nil, err
 	}
-	return bind.NewBoundContract(address, parsed, caller, transactor, filterer), nil
+	return bind.NewBoundContract(address, *parsed, caller, transactor, filterer), nil
 }
 
 // Call invokes the (constant) contract method with params as input values and
@@ -155,12 +164,12 @@ func (_Oneinchexchange *OneinchexchangeRaw) Call(opts *bind.CallOpts, result *[]
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
-func (_Oneinchexchange *OneinchexchangeRaw) Transfer(opts *bind.TransactOpts) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.OneinchexchangeTransactor.contract.Transfer(opts)
 }
 
 // Transact invokes the (paid) contract method with params as input values.
-func (_Oneinchexchange *OneinchexchangeRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.OneinchexchangeTransactor.contract.Transact(opts, method, params...)
 }
 
@@ -174,27 +183,27 @@ func (_Oneinchexchange *OneinchexchangeCallerRaw) Call(opts *bind.CallOpts, resu
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
-func (_Oneinchexchange *OneinchexchangeTransactorRaw) Transfer(opts *bind.TransactOpts) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.contract.Transfer(opts)
 }
 
 // Transact invokes the (paid) contract method with params as input values.
-func (_Oneinchexchange *OneinchexchangeTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.contract.Transact(opts, method, params...)
 }
 
 // Owner is a free data retrieval call binding the contract method 0x8da5cb5b.
 //
 // Solidity: function owner() view returns(address)
-func (_Oneinchexchange *OneinchexchangeCaller) Owner(opts *bind.CallOpts) (libcommon.Address, error) {
+func (_Oneinchexchange *OneinchexchangeCaller) Owner(opts *bind.CallOpts) (common.Address, error) {
 	var out []interface{}
 	err := _Oneinchexchange.contract.Call(opts, &out, "owner")
 
 	if err != nil {
-		return *new(libcommon.Address), err
+		return *new(common.Address), err
 	}
 
-	out0 := *abi.ConvertType(out[0], new(libcommon.Address)).(*libcommon.Address)
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
 
 	return out0, err
 
@@ -203,203 +212,203 @@ func (_Oneinchexchange *OneinchexchangeCaller) Owner(opts *bind.CallOpts) (libco
 // Owner is a free data retrieval call binding the contract method 0x8da5cb5b.
 //
 // Solidity: function owner() view returns(address)
-func (_Oneinchexchange *OneinchexchangeSession) Owner() (libcommon.Address, error) {
+func (_Oneinchexchange *OneinchexchangeSession) Owner() (common.Address, error) {
 	return _Oneinchexchange.Contract.Owner(&_Oneinchexchange.CallOpts)
 }
 
 // Owner is a free data retrieval call binding the contract method 0x8da5cb5b.
 //
 // Solidity: function owner() view returns(address)
-func (_Oneinchexchange *OneinchexchangeCallerSession) Owner() (libcommon.Address, error) {
+func (_Oneinchexchange *OneinchexchangeCallerSession) Owner() (common.Address, error) {
 	return _Oneinchexchange.Contract.Owner(&_Oneinchexchange.CallOpts)
 }
 
 // Destroy is a paid mutator transaction binding the contract method 0x83197ef0.
 //
 // Solidity: function destroy() returns()
-func (_Oneinchexchange *OneinchexchangeTransactor) Destroy(opts *bind.TransactOpts) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactor) Destroy(opts *bind.TransactOpts) (*types.Transaction, error) {
 	return _Oneinchexchange.contract.Transact(opts, "destroy")
 }
 
 // Destroy is a paid mutator transaction binding the contract method 0x83197ef0.
 //
 // Solidity: function destroy() returns()
-func (_Oneinchexchange *OneinchexchangeSession) Destroy() (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeSession) Destroy() (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.Destroy(&_Oneinchexchange.TransactOpts)
 }
 
 // Destroy is a paid mutator transaction binding the contract method 0x83197ef0.
 //
 // Solidity: function destroy() returns()
-func (_Oneinchexchange *OneinchexchangeTransactorSession) Destroy() (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactorSession) Destroy() (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.Destroy(&_Oneinchexchange.TransactOpts)
 }
 
 // DiscountedSwap is a paid mutator transaction binding the contract method 0x6c4a483e.
 //
 // Solidity: function discountedSwap(address caller, (address,address,address,address,uint256,uint256,uint256,bytes) desc, bytes data) payable returns(uint256 returnAmount, uint256 gasLeft, uint256 chiSpent)
-func (_Oneinchexchange *OneinchexchangeTransactor) DiscountedSwap(opts *bind.TransactOpts, caller libcommon.Address, desc AggregationRouterV3SwapDescription, data []byte) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactor) DiscountedSwap(opts *bind.TransactOpts, caller common.Address, desc AggregationRouterV3SwapDescription, data []byte) (*types.Transaction, error) {
 	return _Oneinchexchange.contract.Transact(opts, "discountedSwap", caller, desc, data)
 }
 
 // DiscountedSwap is a paid mutator transaction binding the contract method 0x6c4a483e.
 //
 // Solidity: function discountedSwap(address caller, (address,address,address,address,uint256,uint256,uint256,bytes) desc, bytes data) payable returns(uint256 returnAmount, uint256 gasLeft, uint256 chiSpent)
-func (_Oneinchexchange *OneinchexchangeSession) DiscountedSwap(caller libcommon.Address, desc AggregationRouterV3SwapDescription, data []byte) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeSession) DiscountedSwap(caller common.Address, desc AggregationRouterV3SwapDescription, data []byte) (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.DiscountedSwap(&_Oneinchexchange.TransactOpts, caller, desc, data)
 }
 
 // DiscountedSwap is a paid mutator transaction binding the contract method 0x6c4a483e.
 //
 // Solidity: function discountedSwap(address caller, (address,address,address,address,uint256,uint256,uint256,bytes) desc, bytes data) payable returns(uint256 returnAmount, uint256 gasLeft, uint256 chiSpent)
-func (_Oneinchexchange *OneinchexchangeTransactorSession) DiscountedSwap(caller libcommon.Address, desc AggregationRouterV3SwapDescription, data []byte) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactorSession) DiscountedSwap(caller common.Address, desc AggregationRouterV3SwapDescription, data []byte) (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.DiscountedSwap(&_Oneinchexchange.TransactOpts, caller, desc, data)
 }
 
 // RenounceOwnership is a paid mutator transaction binding the contract method 0x715018a6.
 //
 // Solidity: function renounceOwnership() returns()
-func (_Oneinchexchange *OneinchexchangeTransactor) RenounceOwnership(opts *bind.TransactOpts) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactor) RenounceOwnership(opts *bind.TransactOpts) (*types.Transaction, error) {
 	return _Oneinchexchange.contract.Transact(opts, "renounceOwnership")
 }
 
 // RenounceOwnership is a paid mutator transaction binding the contract method 0x715018a6.
 //
 // Solidity: function renounceOwnership() returns()
-func (_Oneinchexchange *OneinchexchangeSession) RenounceOwnership() (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeSession) RenounceOwnership() (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.RenounceOwnership(&_Oneinchexchange.TransactOpts)
 }
 
 // RenounceOwnership is a paid mutator transaction binding the contract method 0x715018a6.
 //
 // Solidity: function renounceOwnership() returns()
-func (_Oneinchexchange *OneinchexchangeTransactorSession) RenounceOwnership() (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactorSession) RenounceOwnership() (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.RenounceOwnership(&_Oneinchexchange.TransactOpts)
 }
 
 // RescueFunds is a paid mutator transaction binding the contract method 0x78e3214f.
 //
 // Solidity: function rescueFunds(address token, uint256 amount) returns()
-func (_Oneinchexchange *OneinchexchangeTransactor) RescueFunds(opts *bind.TransactOpts, token libcommon.Address, amount *big.Int) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactor) RescueFunds(opts *bind.TransactOpts, token common.Address, amount *big.Int) (*types.Transaction, error) {
 	return _Oneinchexchange.contract.Transact(opts, "rescueFunds", token, amount)
 }
 
 // RescueFunds is a paid mutator transaction binding the contract method 0x78e3214f.
 //
 // Solidity: function rescueFunds(address token, uint256 amount) returns()
-func (_Oneinchexchange *OneinchexchangeSession) RescueFunds(token libcommon.Address, amount *big.Int) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeSession) RescueFunds(token common.Address, amount *big.Int) (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.RescueFunds(&_Oneinchexchange.TransactOpts, token, amount)
 }
 
 // RescueFunds is a paid mutator transaction binding the contract method 0x78e3214f.
 //
 // Solidity: function rescueFunds(address token, uint256 amount) returns()
-func (_Oneinchexchange *OneinchexchangeTransactorSession) RescueFunds(token libcommon.Address, amount *big.Int) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactorSession) RescueFunds(token common.Address, amount *big.Int) (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.RescueFunds(&_Oneinchexchange.TransactOpts, token, amount)
 }
 
 // Swap is a paid mutator transaction binding the contract method 0x7c025200.
 //
 // Solidity: function swap(address caller, (address,address,address,address,uint256,uint256,uint256,bytes) desc, bytes data) payable returns(uint256 returnAmount, uint256 gasLeft)
-func (_Oneinchexchange *OneinchexchangeTransactor) Swap(opts *bind.TransactOpts, caller libcommon.Address, desc AggregationRouterV3SwapDescription, data []byte) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactor) Swap(opts *bind.TransactOpts, caller common.Address, desc AggregationRouterV3SwapDescription, data []byte) (*types.Transaction, error) {
 	return _Oneinchexchange.contract.Transact(opts, "swap", caller, desc, data)
 }
 
 // Swap is a paid mutator transaction binding the contract method 0x7c025200.
 //
 // Solidity: function swap(address caller, (address,address,address,address,uint256,uint256,uint256,bytes) desc, bytes data) payable returns(uint256 returnAmount, uint256 gasLeft)
-func (_Oneinchexchange *OneinchexchangeSession) Swap(caller libcommon.Address, desc AggregationRouterV3SwapDescription, data []byte) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeSession) Swap(caller common.Address, desc AggregationRouterV3SwapDescription, data []byte) (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.Swap(&_Oneinchexchange.TransactOpts, caller, desc, data)
 }
 
 // Swap is a paid mutator transaction binding the contract method 0x7c025200.
 //
 // Solidity: function swap(address caller, (address,address,address,address,uint256,uint256,uint256,bytes) desc, bytes data) payable returns(uint256 returnAmount, uint256 gasLeft)
-func (_Oneinchexchange *OneinchexchangeTransactorSession) Swap(caller libcommon.Address, desc AggregationRouterV3SwapDescription, data []byte) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactorSession) Swap(caller common.Address, desc AggregationRouterV3SwapDescription, data []byte) (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.Swap(&_Oneinchexchange.TransactOpts, caller, desc, data)
 }
 
 // TransferOwnership is a paid mutator transaction binding the contract method 0xf2fde38b.
 //
 // Solidity: function transferOwnership(address newOwner) returns()
-func (_Oneinchexchange *OneinchexchangeTransactor) TransferOwnership(opts *bind.TransactOpts, newOwner libcommon.Address) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactor) TransferOwnership(opts *bind.TransactOpts, newOwner common.Address) (*types.Transaction, error) {
 	return _Oneinchexchange.contract.Transact(opts, "transferOwnership", newOwner)
 }
 
 // TransferOwnership is a paid mutator transaction binding the contract method 0xf2fde38b.
 //
 // Solidity: function transferOwnership(address newOwner) returns()
-func (_Oneinchexchange *OneinchexchangeSession) TransferOwnership(newOwner libcommon.Address) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeSession) TransferOwnership(newOwner common.Address) (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.TransferOwnership(&_Oneinchexchange.TransactOpts, newOwner)
 }
 
 // TransferOwnership is a paid mutator transaction binding the contract method 0xf2fde38b.
 //
 // Solidity: function transferOwnership(address newOwner) returns()
-func (_Oneinchexchange *OneinchexchangeTransactorSession) TransferOwnership(newOwner libcommon.Address) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactorSession) TransferOwnership(newOwner common.Address) (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.TransferOwnership(&_Oneinchexchange.TransactOpts, newOwner)
 }
 
 // Unoswap is a paid mutator transaction binding the contract method 0x2e95b6c8.
 //
 // Solidity: function unoswap(address srcToken, uint256 amount, uint256 minReturn, bytes32[] ) payable returns(uint256 returnAmount)
-func (_Oneinchexchange *OneinchexchangeTransactor) Unoswap(opts *bind.TransactOpts, srcToken libcommon.Address, amount *big.Int, minReturn *big.Int, arg3 [][32]byte) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactor) Unoswap(opts *bind.TransactOpts, srcToken common.Address, amount *big.Int, minReturn *big.Int, arg3 [][32]byte) (*types.Transaction, error) {
 	return _Oneinchexchange.contract.Transact(opts, "unoswap", srcToken, amount, minReturn, arg3)
 }
 
 // Unoswap is a paid mutator transaction binding the contract method 0x2e95b6c8.
 //
 // Solidity: function unoswap(address srcToken, uint256 amount, uint256 minReturn, bytes32[] ) payable returns(uint256 returnAmount)
-func (_Oneinchexchange *OneinchexchangeSession) Unoswap(srcToken libcommon.Address, amount *big.Int, minReturn *big.Int, arg3 [][32]byte) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeSession) Unoswap(srcToken common.Address, amount *big.Int, minReturn *big.Int, arg3 [][32]byte) (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.Unoswap(&_Oneinchexchange.TransactOpts, srcToken, amount, minReturn, arg3)
 }
 
 // Unoswap is a paid mutator transaction binding the contract method 0x2e95b6c8.
 //
 // Solidity: function unoswap(address srcToken, uint256 amount, uint256 minReturn, bytes32[] ) payable returns(uint256 returnAmount)
-func (_Oneinchexchange *OneinchexchangeTransactorSession) Unoswap(srcToken libcommon.Address, amount *big.Int, minReturn *big.Int, arg3 [][32]byte) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactorSession) Unoswap(srcToken common.Address, amount *big.Int, minReturn *big.Int, arg3 [][32]byte) (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.Unoswap(&_Oneinchexchange.TransactOpts, srcToken, amount, minReturn, arg3)
 }
 
 // UnoswapWithPermit is a paid mutator transaction binding the contract method 0xa1251d75.
 //
 // Solidity: function unoswapWithPermit(address srcToken, uint256 amount, uint256 minReturn, bytes32[] pools, bytes permit) payable returns(uint256 returnAmount)
-func (_Oneinchexchange *OneinchexchangeTransactor) UnoswapWithPermit(opts *bind.TransactOpts, srcToken libcommon.Address, amount *big.Int, minReturn *big.Int, pools [][32]byte, permit []byte) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactor) UnoswapWithPermit(opts *bind.TransactOpts, srcToken common.Address, amount *big.Int, minReturn *big.Int, pools [][32]byte, permit []byte) (*types.Transaction, error) {
 	return _Oneinchexchange.contract.Transact(opts, "unoswapWithPermit", srcToken, amount, minReturn, pools, permit)
 }
 
 // UnoswapWithPermit is a paid mutator transaction binding the contract method 0xa1251d75.
 //
 // Solidity: function unoswapWithPermit(address srcToken, uint256 amount, uint256 minReturn, bytes32[] pools, bytes permit) payable returns(uint256 returnAmount)
-func (_Oneinchexchange *OneinchexchangeSession) UnoswapWithPermit(srcToken libcommon.Address, amount *big.Int, minReturn *big.Int, pools [][32]byte, permit []byte) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeSession) UnoswapWithPermit(srcToken common.Address, amount *big.Int, minReturn *big.Int, pools [][32]byte, permit []byte) (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.UnoswapWithPermit(&_Oneinchexchange.TransactOpts, srcToken, amount, minReturn, pools, permit)
 }
 
 // UnoswapWithPermit is a paid mutator transaction binding the contract method 0xa1251d75.
 //
 // Solidity: function unoswapWithPermit(address srcToken, uint256 amount, uint256 minReturn, bytes32[] pools, bytes permit) payable returns(uint256 returnAmount)
-func (_Oneinchexchange *OneinchexchangeTransactorSession) UnoswapWithPermit(srcToken libcommon.Address, amount *big.Int, minReturn *big.Int, pools [][32]byte, permit []byte) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactorSession) UnoswapWithPermit(srcToken common.Address, amount *big.Int, minReturn *big.Int, pools [][32]byte, permit []byte) (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.UnoswapWithPermit(&_Oneinchexchange.TransactOpts, srcToken, amount, minReturn, pools, permit)
 }
 
 // Receive is a paid mutator transaction binding the contract receive function.
 //
 // Solidity: receive() payable returns()
-func (_Oneinchexchange *OneinchexchangeTransactor) Receive(opts *bind.TransactOpts) (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactor) Receive(opts *bind.TransactOpts) (*types.Transaction, error) {
 	return _Oneinchexchange.contract.RawTransact(opts, nil) // calldata is disallowed for receive function
 }
 
 // Receive is a paid mutator transaction binding the contract receive function.
 //
 // Solidity: receive() payable returns()
-func (_Oneinchexchange *OneinchexchangeSession) Receive() (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeSession) Receive() (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.Receive(&_Oneinchexchange.TransactOpts)
 }
 
 // Receive is a paid mutator transaction binding the contract receive function.
 //
 // Solidity: receive() payable returns()
-func (_Oneinchexchange *OneinchexchangeTransactorSession) Receive() (types.Transaction, error) {
+func (_Oneinchexchange *OneinchexchangeTransactorSession) Receive() (*types.Transaction, error) {
 	return _Oneinchexchange.Contract.Receive(&_Oneinchexchange.TransactOpts)
 }
 
@@ -606,15 +615,15 @@ func (it *OneinchexchangeOwnershipTransferredIterator) Close() error {
 
 // OneinchexchangeOwnershipTransferred represents a OwnershipTransferred event raised by the Oneinchexchange contract.
 type OneinchexchangeOwnershipTransferred struct {
-	PreviousOwner libcommon.Address
-	NewOwner      libcommon.Address
+	PreviousOwner common.Address
+	NewOwner      common.Address
 	Raw           types.Log // Blockchain specific contextual infos
 }
 
 // FilterOwnershipTransferred is a free log retrieval operation binding the contract event 0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0.
 //
 // Solidity: event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)
-func (_Oneinchexchange *OneinchexchangeFilterer) FilterOwnershipTransferred(opts *bind.FilterOpts, previousOwner []libcommon.Address, newOwner []libcommon.Address) (*OneinchexchangeOwnershipTransferredIterator, error) {
+func (_Oneinchexchange *OneinchexchangeFilterer) FilterOwnershipTransferred(opts *bind.FilterOpts, previousOwner []common.Address, newOwner []common.Address) (*OneinchexchangeOwnershipTransferredIterator, error) {
 
 	var previousOwnerRule []interface{}
 	for _, previousOwnerItem := range previousOwner {
@@ -635,7 +644,7 @@ func (_Oneinchexchange *OneinchexchangeFilterer) FilterOwnershipTransferred(opts
 // WatchOwnershipTransferred is a free log subscription operation binding the contract event 0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0.
 //
 // Solidity: event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)
-func (_Oneinchexchange *OneinchexchangeFilterer) WatchOwnershipTransferred(opts *bind.WatchOpts, sink chan<- *OneinchexchangeOwnershipTransferred, previousOwner []libcommon.Address, newOwner []libcommon.Address) (event.Subscription, error) {
+func (_Oneinchexchange *OneinchexchangeFilterer) WatchOwnershipTransferred(opts *bind.WatchOpts, sink chan<- *OneinchexchangeOwnershipTransferred, previousOwner []common.Address, newOwner []common.Address) (event.Subscription, error) {
 
 	var previousOwnerRule []interface{}
 	for _, previousOwnerItem := range previousOwner {
@@ -759,10 +768,10 @@ func (it *OneinchexchangeSwappedIterator) Close() error {
 
 // OneinchexchangeSwapped represents a Swapped event raised by the Oneinchexchange contract.
 type OneinchexchangeSwapped struct {
-	Sender       libcommon.Address
-	SrcToken     libcommon.Address
-	DstToken     libcommon.Address
-	DstReceiver  libcommon.Address
+	Sender       common.Address
+	SrcToken     common.Address
+	DstToken     common.Address
+	DstReceiver  common.Address
 	SpentAmount  *big.Int
 	ReturnAmount *big.Int
 	Raw          types.Log // Blockchain specific contextual infos

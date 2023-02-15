@@ -4,19 +4,21 @@
 package erc1155
 
 import (
+	"errors"
 	"math/big"
 	"strings"
 
-	ethereum "github.com/ledgerwatch/erigon"
-	"github.com/ledgerwatch/erigon/accounts/abi"
-	"github.com/ledgerwatch/erigon/accounts/abi/bind"
-	"github.com/ledgerwatch/erigon/common"
-	"github.com/ledgerwatch/erigon/core/types"
-	"github.com/ledgerwatch/erigon/event"
+	ethereum "github.com/ethereum/go-ethereum"
+	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/event"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
 var (
+	_ = errors.New
 	_ = big.NewInt
 	_ = strings.NewReader
 	_ = ethereum.NotFound
@@ -24,10 +26,17 @@ var (
 	_ = common.Big1
 	_ = types.BloomLookup
 	_ = event.NewSubscription
+	_ = abi.ConvertType
 )
 
+// Erc1155MetaData contains all meta data concerning the Erc1155 contract.
+var Erc1155MetaData = &bind.MetaData{
+	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"approved\",\"type\":\"bool\"}],\"name\":\"ApprovalForAll\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"ids\",\"type\":\"uint256[]\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"values\",\"type\":\"uint256[]\"}],\"name\":\"TransferBatch\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"TransferSingle\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"value\",\"type\":\"string\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"URI\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"accounts\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"ids\",\"type\":\"uint256[]\"}],\"name\":\"balanceOfBatch\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"}],\"name\":\"isApprovedForAll\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256[]\",\"name\":\"ids\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256[]\",\"name\":\"amounts\",\"type\":\"uint256[]\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"safeBatchTransferFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"safeTransferFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"approved\",\"type\":\"bool\"}],\"name\":\"setApprovalForAll\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"uri\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
+}
+
 // Erc1155ABI is the input ABI used to generate the binding from.
-const Erc1155ABI = "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"approved\",\"type\":\"bool\"}],\"name\":\"ApprovalForAll\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"ids\",\"type\":\"uint256[]\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"values\",\"type\":\"uint256[]\"}],\"name\":\"TransferBatch\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"TransferSingle\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"value\",\"type\":\"string\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"URI\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"accounts\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"ids\",\"type\":\"uint256[]\"}],\"name\":\"balanceOfBatch\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"}],\"name\":\"isApprovedForAll\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256[]\",\"name\":\"ids\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256[]\",\"name\":\"amounts\",\"type\":\"uint256[]\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"safeBatchTransferFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"safeTransferFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"approved\",\"type\":\"bool\"}],\"name\":\"setApprovalForAll\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"uri\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]"
+// Deprecated: Use Erc1155MetaData.ABI instead.
+var Erc1155ABI = Erc1155MetaData.ABI
 
 // Erc1155 is an auto generated Go binding around an Ethereum contract.
 type Erc1155 struct {
@@ -89,7 +98,7 @@ type Erc1155TransactorRaw struct {
 }
 
 // NewErc1155 creates a new instance of Erc1155, bound to a specific deployed contract.
-func NewErc1155(address libcommon.Address, backend bind.ContractBackend) (*Erc1155, error) {
+func NewErc1155(address common.Address, backend bind.ContractBackend) (*Erc1155, error) {
 	contract, err := bindErc1155(address, backend, backend, backend)
 	if err != nil {
 		return nil, err
@@ -98,7 +107,7 @@ func NewErc1155(address libcommon.Address, backend bind.ContractBackend) (*Erc11
 }
 
 // NewErc1155Caller creates a new read-only instance of Erc1155, bound to a specific deployed contract.
-func NewErc1155Caller(address libcommon.Address, caller bind.ContractCaller) (*Erc1155Caller, error) {
+func NewErc1155Caller(address common.Address, caller bind.ContractCaller) (*Erc1155Caller, error) {
 	contract, err := bindErc1155(address, caller, nil, nil)
 	if err != nil {
 		return nil, err
@@ -107,7 +116,7 @@ func NewErc1155Caller(address libcommon.Address, caller bind.ContractCaller) (*E
 }
 
 // NewErc1155Transactor creates a new write-only instance of Erc1155, bound to a specific deployed contract.
-func NewErc1155Transactor(address libcommon.Address, transactor bind.ContractTransactor) (*Erc1155Transactor, error) {
+func NewErc1155Transactor(address common.Address, transactor bind.ContractTransactor) (*Erc1155Transactor, error) {
 	contract, err := bindErc1155(address, nil, transactor, nil)
 	if err != nil {
 		return nil, err
@@ -116,7 +125,7 @@ func NewErc1155Transactor(address libcommon.Address, transactor bind.ContractTra
 }
 
 // NewErc1155Filterer creates a new log filterer instance of Erc1155, bound to a specific deployed contract.
-func NewErc1155Filterer(address libcommon.Address, filterer bind.ContractFilterer) (*Erc1155Filterer, error) {
+func NewErc1155Filterer(address common.Address, filterer bind.ContractFilterer) (*Erc1155Filterer, error) {
 	contract, err := bindErc1155(address, nil, nil, filterer)
 	if err != nil {
 		return nil, err
@@ -125,12 +134,12 @@ func NewErc1155Filterer(address libcommon.Address, filterer bind.ContractFiltere
 }
 
 // bindErc1155 binds a generic wrapper to an already deployed contract.
-func bindErc1155(address libcommon.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
-	parsed, err := abi.JSON(strings.NewReader(Erc1155ABI))
+func bindErc1155(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
+	parsed, err := Erc1155MetaData.GetAbi()
 	if err != nil {
 		return nil, err
 	}
-	return bind.NewBoundContract(address, parsed, caller, transactor, filterer), nil
+	return bind.NewBoundContract(address, *parsed, caller, transactor, filterer), nil
 }
 
 // Call invokes the (constant) contract method with params as input values and
@@ -143,12 +152,12 @@ func (_Erc1155 *Erc1155Raw) Call(opts *bind.CallOpts, result *[]interface{}, met
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
-func (_Erc1155 *Erc1155Raw) Transfer(opts *bind.TransactOpts) (types.Transaction, error) {
+func (_Erc1155 *Erc1155Raw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
 	return _Erc1155.Contract.Erc1155Transactor.contract.Transfer(opts)
 }
 
 // Transact invokes the (paid) contract method with params as input values.
-func (_Erc1155 *Erc1155Raw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (types.Transaction, error) {
+func (_Erc1155 *Erc1155Raw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
 	return _Erc1155.Contract.Erc1155Transactor.contract.Transact(opts, method, params...)
 }
 
@@ -162,19 +171,19 @@ func (_Erc1155 *Erc1155CallerRaw) Call(opts *bind.CallOpts, result *[]interface{
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
-func (_Erc1155 *Erc1155TransactorRaw) Transfer(opts *bind.TransactOpts) (types.Transaction, error) {
+func (_Erc1155 *Erc1155TransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
 	return _Erc1155.Contract.contract.Transfer(opts)
 }
 
 // Transact invokes the (paid) contract method with params as input values.
-func (_Erc1155 *Erc1155TransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (types.Transaction, error) {
+func (_Erc1155 *Erc1155TransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
 	return _Erc1155.Contract.contract.Transact(opts, method, params...)
 }
 
 // BalanceOf is a free data retrieval call binding the contract method 0x00fdd58e.
 //
 // Solidity: function balanceOf(address account, uint256 id) view returns(uint256)
-func (_Erc1155 *Erc1155Caller) BalanceOf(opts *bind.CallOpts, account libcommon.Address, id *big.Int) (*big.Int, error) {
+func (_Erc1155 *Erc1155Caller) BalanceOf(opts *bind.CallOpts, account common.Address, id *big.Int) (*big.Int, error) {
 	var out []interface{}
 	err := _Erc1155.contract.Call(opts, &out, "balanceOf", account, id)
 
@@ -191,21 +200,21 @@ func (_Erc1155 *Erc1155Caller) BalanceOf(opts *bind.CallOpts, account libcommon.
 // BalanceOf is a free data retrieval call binding the contract method 0x00fdd58e.
 //
 // Solidity: function balanceOf(address account, uint256 id) view returns(uint256)
-func (_Erc1155 *Erc1155Session) BalanceOf(account libcommon.Address, id *big.Int) (*big.Int, error) {
+func (_Erc1155 *Erc1155Session) BalanceOf(account common.Address, id *big.Int) (*big.Int, error) {
 	return _Erc1155.Contract.BalanceOf(&_Erc1155.CallOpts, account, id)
 }
 
 // BalanceOf is a free data retrieval call binding the contract method 0x00fdd58e.
 //
 // Solidity: function balanceOf(address account, uint256 id) view returns(uint256)
-func (_Erc1155 *Erc1155CallerSession) BalanceOf(account libcommon.Address, id *big.Int) (*big.Int, error) {
+func (_Erc1155 *Erc1155CallerSession) BalanceOf(account common.Address, id *big.Int) (*big.Int, error) {
 	return _Erc1155.Contract.BalanceOf(&_Erc1155.CallOpts, account, id)
 }
 
 // BalanceOfBatch is a free data retrieval call binding the contract method 0x4e1273f4.
 //
 // Solidity: function balanceOfBatch(address[] accounts, uint256[] ids) view returns(uint256[])
-func (_Erc1155 *Erc1155Caller) BalanceOfBatch(opts *bind.CallOpts, accounts []libcommon.Address, ids []*big.Int) ([]*big.Int, error) {
+func (_Erc1155 *Erc1155Caller) BalanceOfBatch(opts *bind.CallOpts, accounts []common.Address, ids []*big.Int) ([]*big.Int, error) {
 	var out []interface{}
 	err := _Erc1155.contract.Call(opts, &out, "balanceOfBatch", accounts, ids)
 
@@ -222,21 +231,21 @@ func (_Erc1155 *Erc1155Caller) BalanceOfBatch(opts *bind.CallOpts, accounts []li
 // BalanceOfBatch is a free data retrieval call binding the contract method 0x4e1273f4.
 //
 // Solidity: function balanceOfBatch(address[] accounts, uint256[] ids) view returns(uint256[])
-func (_Erc1155 *Erc1155Session) BalanceOfBatch(accounts []libcommon.Address, ids []*big.Int) ([]*big.Int, error) {
+func (_Erc1155 *Erc1155Session) BalanceOfBatch(accounts []common.Address, ids []*big.Int) ([]*big.Int, error) {
 	return _Erc1155.Contract.BalanceOfBatch(&_Erc1155.CallOpts, accounts, ids)
 }
 
 // BalanceOfBatch is a free data retrieval call binding the contract method 0x4e1273f4.
 //
 // Solidity: function balanceOfBatch(address[] accounts, uint256[] ids) view returns(uint256[])
-func (_Erc1155 *Erc1155CallerSession) BalanceOfBatch(accounts []libcommon.Address, ids []*big.Int) ([]*big.Int, error) {
+func (_Erc1155 *Erc1155CallerSession) BalanceOfBatch(accounts []common.Address, ids []*big.Int) ([]*big.Int, error) {
 	return _Erc1155.Contract.BalanceOfBatch(&_Erc1155.CallOpts, accounts, ids)
 }
 
 // IsApprovedForAll is a free data retrieval call binding the contract method 0xe985e9c5.
 //
 // Solidity: function isApprovedForAll(address account, address operator) view returns(bool)
-func (_Erc1155 *Erc1155Caller) IsApprovedForAll(opts *bind.CallOpts, account libcommon.Address, operator libcommon.Address) (bool, error) {
+func (_Erc1155 *Erc1155Caller) IsApprovedForAll(opts *bind.CallOpts, account common.Address, operator common.Address) (bool, error) {
 	var out []interface{}
 	err := _Erc1155.contract.Call(opts, &out, "isApprovedForAll", account, operator)
 
@@ -253,14 +262,14 @@ func (_Erc1155 *Erc1155Caller) IsApprovedForAll(opts *bind.CallOpts, account lib
 // IsApprovedForAll is a free data retrieval call binding the contract method 0xe985e9c5.
 //
 // Solidity: function isApprovedForAll(address account, address operator) view returns(bool)
-func (_Erc1155 *Erc1155Session) IsApprovedForAll(account libcommon.Address, operator libcommon.Address) (bool, error) {
+func (_Erc1155 *Erc1155Session) IsApprovedForAll(account common.Address, operator common.Address) (bool, error) {
 	return _Erc1155.Contract.IsApprovedForAll(&_Erc1155.CallOpts, account, operator)
 }
 
 // IsApprovedForAll is a free data retrieval call binding the contract method 0xe985e9c5.
 //
 // Solidity: function isApprovedForAll(address account, address operator) view returns(bool)
-func (_Erc1155 *Erc1155CallerSession) IsApprovedForAll(account libcommon.Address, operator libcommon.Address) (bool, error) {
+func (_Erc1155 *Erc1155CallerSession) IsApprovedForAll(account common.Address, operator common.Address) (bool, error) {
 	return _Erc1155.Contract.IsApprovedForAll(&_Erc1155.CallOpts, account, operator)
 }
 
@@ -329,63 +338,63 @@ func (_Erc1155 *Erc1155CallerSession) Uri(id *big.Int) (string, error) {
 // SafeBatchTransferFrom is a paid mutator transaction binding the contract method 0x2eb2c2d6.
 //
 // Solidity: function safeBatchTransferFrom(address from, address to, uint256[] ids, uint256[] amounts, bytes data) returns()
-func (_Erc1155 *Erc1155Transactor) SafeBatchTransferFrom(opts *bind.TransactOpts, from libcommon.Address, to libcommon.Address, ids []*big.Int, amounts []*big.Int, data []byte) (types.Transaction, error) {
+func (_Erc1155 *Erc1155Transactor) SafeBatchTransferFrom(opts *bind.TransactOpts, from common.Address, to common.Address, ids []*big.Int, amounts []*big.Int, data []byte) (*types.Transaction, error) {
 	return _Erc1155.contract.Transact(opts, "safeBatchTransferFrom", from, to, ids, amounts, data)
 }
 
 // SafeBatchTransferFrom is a paid mutator transaction binding the contract method 0x2eb2c2d6.
 //
 // Solidity: function safeBatchTransferFrom(address from, address to, uint256[] ids, uint256[] amounts, bytes data) returns()
-func (_Erc1155 *Erc1155Session) SafeBatchTransferFrom(from libcommon.Address, to libcommon.Address, ids []*big.Int, amounts []*big.Int, data []byte) (types.Transaction, error) {
+func (_Erc1155 *Erc1155Session) SafeBatchTransferFrom(from common.Address, to common.Address, ids []*big.Int, amounts []*big.Int, data []byte) (*types.Transaction, error) {
 	return _Erc1155.Contract.SafeBatchTransferFrom(&_Erc1155.TransactOpts, from, to, ids, amounts, data)
 }
 
 // SafeBatchTransferFrom is a paid mutator transaction binding the contract method 0x2eb2c2d6.
 //
 // Solidity: function safeBatchTransferFrom(address from, address to, uint256[] ids, uint256[] amounts, bytes data) returns()
-func (_Erc1155 *Erc1155TransactorSession) SafeBatchTransferFrom(from libcommon.Address, to libcommon.Address, ids []*big.Int, amounts []*big.Int, data []byte) (types.Transaction, error) {
+func (_Erc1155 *Erc1155TransactorSession) SafeBatchTransferFrom(from common.Address, to common.Address, ids []*big.Int, amounts []*big.Int, data []byte) (*types.Transaction, error) {
 	return _Erc1155.Contract.SafeBatchTransferFrom(&_Erc1155.TransactOpts, from, to, ids, amounts, data)
 }
 
 // SafeTransferFrom is a paid mutator transaction binding the contract method 0xf242432a.
 //
 // Solidity: function safeTransferFrom(address from, address to, uint256 id, uint256 amount, bytes data) returns()
-func (_Erc1155 *Erc1155Transactor) SafeTransferFrom(opts *bind.TransactOpts, from libcommon.Address, to libcommon.Address, id *big.Int, amount *big.Int, data []byte) (types.Transaction, error) {
+func (_Erc1155 *Erc1155Transactor) SafeTransferFrom(opts *bind.TransactOpts, from common.Address, to common.Address, id *big.Int, amount *big.Int, data []byte) (*types.Transaction, error) {
 	return _Erc1155.contract.Transact(opts, "safeTransferFrom", from, to, id, amount, data)
 }
 
 // SafeTransferFrom is a paid mutator transaction binding the contract method 0xf242432a.
 //
 // Solidity: function safeTransferFrom(address from, address to, uint256 id, uint256 amount, bytes data) returns()
-func (_Erc1155 *Erc1155Session) SafeTransferFrom(from libcommon.Address, to libcommon.Address, id *big.Int, amount *big.Int, data []byte) (types.Transaction, error) {
+func (_Erc1155 *Erc1155Session) SafeTransferFrom(from common.Address, to common.Address, id *big.Int, amount *big.Int, data []byte) (*types.Transaction, error) {
 	return _Erc1155.Contract.SafeTransferFrom(&_Erc1155.TransactOpts, from, to, id, amount, data)
 }
 
 // SafeTransferFrom is a paid mutator transaction binding the contract method 0xf242432a.
 //
 // Solidity: function safeTransferFrom(address from, address to, uint256 id, uint256 amount, bytes data) returns()
-func (_Erc1155 *Erc1155TransactorSession) SafeTransferFrom(from libcommon.Address, to libcommon.Address, id *big.Int, amount *big.Int, data []byte) (types.Transaction, error) {
+func (_Erc1155 *Erc1155TransactorSession) SafeTransferFrom(from common.Address, to common.Address, id *big.Int, amount *big.Int, data []byte) (*types.Transaction, error) {
 	return _Erc1155.Contract.SafeTransferFrom(&_Erc1155.TransactOpts, from, to, id, amount, data)
 }
 
 // SetApprovalForAll is a paid mutator transaction binding the contract method 0xa22cb465.
 //
 // Solidity: function setApprovalForAll(address operator, bool approved) returns()
-func (_Erc1155 *Erc1155Transactor) SetApprovalForAll(opts *bind.TransactOpts, operator libcommon.Address, approved bool) (types.Transaction, error) {
+func (_Erc1155 *Erc1155Transactor) SetApprovalForAll(opts *bind.TransactOpts, operator common.Address, approved bool) (*types.Transaction, error) {
 	return _Erc1155.contract.Transact(opts, "setApprovalForAll", operator, approved)
 }
 
 // SetApprovalForAll is a paid mutator transaction binding the contract method 0xa22cb465.
 //
 // Solidity: function setApprovalForAll(address operator, bool approved) returns()
-func (_Erc1155 *Erc1155Session) SetApprovalForAll(operator libcommon.Address, approved bool) (types.Transaction, error) {
+func (_Erc1155 *Erc1155Session) SetApprovalForAll(operator common.Address, approved bool) (*types.Transaction, error) {
 	return _Erc1155.Contract.SetApprovalForAll(&_Erc1155.TransactOpts, operator, approved)
 }
 
 // SetApprovalForAll is a paid mutator transaction binding the contract method 0xa22cb465.
 //
 // Solidity: function setApprovalForAll(address operator, bool approved) returns()
-func (_Erc1155 *Erc1155TransactorSession) SetApprovalForAll(operator libcommon.Address, approved bool) (types.Transaction, error) {
+func (_Erc1155 *Erc1155TransactorSession) SetApprovalForAll(operator common.Address, approved bool) (*types.Transaction, error) {
 	return _Erc1155.Contract.SetApprovalForAll(&_Erc1155.TransactOpts, operator, approved)
 }
 
@@ -458,8 +467,8 @@ func (it *Erc1155ApprovalForAllIterator) Close() error {
 
 // Erc1155ApprovalForAll represents a ApprovalForAll event raised by the Erc1155 contract.
 type Erc1155ApprovalForAll struct {
-	Account  libcommon.Address
-	Operator libcommon.Address
+	Account  common.Address
+	Operator common.Address
 	Approved bool
 	Raw      types.Log // Blockchain specific contextual infos
 }
@@ -467,7 +476,7 @@ type Erc1155ApprovalForAll struct {
 // FilterApprovalForAll is a free log retrieval operation binding the contract event 0x17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c31.
 //
 // Solidity: event ApprovalForAll(address indexed account, address indexed operator, bool approved)
-func (_Erc1155 *Erc1155Filterer) FilterApprovalForAll(opts *bind.FilterOpts, account []libcommon.Address, operator []libcommon.Address) (*Erc1155ApprovalForAllIterator, error) {
+func (_Erc1155 *Erc1155Filterer) FilterApprovalForAll(opts *bind.FilterOpts, account []common.Address, operator []common.Address) (*Erc1155ApprovalForAllIterator, error) {
 
 	var accountRule []interface{}
 	for _, accountItem := range account {
@@ -488,7 +497,7 @@ func (_Erc1155 *Erc1155Filterer) FilterApprovalForAll(opts *bind.FilterOpts, acc
 // WatchApprovalForAll is a free log subscription operation binding the contract event 0x17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c31.
 //
 // Solidity: event ApprovalForAll(address indexed account, address indexed operator, bool approved)
-func (_Erc1155 *Erc1155Filterer) WatchApprovalForAll(opts *bind.WatchOpts, sink chan<- *Erc1155ApprovalForAll, account []libcommon.Address, operator []libcommon.Address) (event.Subscription, error) {
+func (_Erc1155 *Erc1155Filterer) WatchApprovalForAll(opts *bind.WatchOpts, sink chan<- *Erc1155ApprovalForAll, account []common.Address, operator []common.Address) (event.Subscription, error) {
 
 	var accountRule []interface{}
 	for _, accountItem := range account {
@@ -612,9 +621,9 @@ func (it *Erc1155TransferBatchIterator) Close() error {
 
 // Erc1155TransferBatch represents a TransferBatch event raised by the Erc1155 contract.
 type Erc1155TransferBatch struct {
-	Operator libcommon.Address
-	From     libcommon.Address
-	To       libcommon.Address
+	Operator common.Address
+	From     common.Address
+	To       common.Address
 	Ids      []*big.Int
 	Values   []*big.Int
 	Raw      types.Log // Blockchain specific contextual infos
@@ -623,7 +632,7 @@ type Erc1155TransferBatch struct {
 // FilterTransferBatch is a free log retrieval operation binding the contract event 0x4a39dc06d4c0dbc64b70af90fd698a233a518aa5d07e595d983b8c0526c8f7fb.
 //
 // Solidity: event TransferBatch(address indexed operator, address indexed from, address indexed to, uint256[] ids, uint256[] values)
-func (_Erc1155 *Erc1155Filterer) FilterTransferBatch(opts *bind.FilterOpts, operator []libcommon.Address, from []libcommon.Address, to []libcommon.Address) (*Erc1155TransferBatchIterator, error) {
+func (_Erc1155 *Erc1155Filterer) FilterTransferBatch(opts *bind.FilterOpts, operator []common.Address, from []common.Address, to []common.Address) (*Erc1155TransferBatchIterator, error) {
 
 	var operatorRule []interface{}
 	for _, operatorItem := range operator {
@@ -648,7 +657,7 @@ func (_Erc1155 *Erc1155Filterer) FilterTransferBatch(opts *bind.FilterOpts, oper
 // WatchTransferBatch is a free log subscription operation binding the contract event 0x4a39dc06d4c0dbc64b70af90fd698a233a518aa5d07e595d983b8c0526c8f7fb.
 //
 // Solidity: event TransferBatch(address indexed operator, address indexed from, address indexed to, uint256[] ids, uint256[] values)
-func (_Erc1155 *Erc1155Filterer) WatchTransferBatch(opts *bind.WatchOpts, sink chan<- *Erc1155TransferBatch, operator []libcommon.Address, from []libcommon.Address, to []libcommon.Address) (event.Subscription, error) {
+func (_Erc1155 *Erc1155Filterer) WatchTransferBatch(opts *bind.WatchOpts, sink chan<- *Erc1155TransferBatch, operator []common.Address, from []common.Address, to []common.Address) (event.Subscription, error) {
 
 	var operatorRule []interface{}
 	for _, operatorItem := range operator {
@@ -776,9 +785,9 @@ func (it *Erc1155TransferSingleIterator) Close() error {
 
 // Erc1155TransferSingle represents a TransferSingle event raised by the Erc1155 contract.
 type Erc1155TransferSingle struct {
-	Operator libcommon.Address
-	From     libcommon.Address
-	To       libcommon.Address
+	Operator common.Address
+	From     common.Address
+	To       common.Address
 	Id       *big.Int
 	Value    *big.Int
 	Raw      types.Log // Blockchain specific contextual infos
@@ -787,7 +796,7 @@ type Erc1155TransferSingle struct {
 // FilterTransferSingle is a free log retrieval operation binding the contract event 0xc3d58168c5ae7397731d063d5bbf3d657854427343f4c083240f7aacaa2d0f62.
 //
 // Solidity: event TransferSingle(address indexed operator, address indexed from, address indexed to, uint256 id, uint256 value)
-func (_Erc1155 *Erc1155Filterer) FilterTransferSingle(opts *bind.FilterOpts, operator []libcommon.Address, from []libcommon.Address, to []libcommon.Address) (*Erc1155TransferSingleIterator, error) {
+func (_Erc1155 *Erc1155Filterer) FilterTransferSingle(opts *bind.FilterOpts, operator []common.Address, from []common.Address, to []common.Address) (*Erc1155TransferSingleIterator, error) {
 
 	var operatorRule []interface{}
 	for _, operatorItem := range operator {
@@ -812,7 +821,7 @@ func (_Erc1155 *Erc1155Filterer) FilterTransferSingle(opts *bind.FilterOpts, ope
 // WatchTransferSingle is a free log subscription operation binding the contract event 0xc3d58168c5ae7397731d063d5bbf3d657854427343f4c083240f7aacaa2d0f62.
 //
 // Solidity: event TransferSingle(address indexed operator, address indexed from, address indexed to, uint256 id, uint256 value)
-func (_Erc1155 *Erc1155Filterer) WatchTransferSingle(opts *bind.WatchOpts, sink chan<- *Erc1155TransferSingle, operator []libcommon.Address, from []libcommon.Address, to []libcommon.Address) (event.Subscription, error) {
+func (_Erc1155 *Erc1155Filterer) WatchTransferSingle(opts *bind.WatchOpts, sink chan<- *Erc1155TransferSingle, operator []common.Address, from []common.Address, to []common.Address) (event.Subscription, error) {
 
 	var operatorRule []interface{}
 	for _, operatorItem := range operator {
