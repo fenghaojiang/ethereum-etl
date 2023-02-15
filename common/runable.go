@@ -1,6 +1,6 @@
 package common
 
-type Runnable interface {
+type IRunnable interface {
 	Start() error
 	Stop() error
 	Restart() error
