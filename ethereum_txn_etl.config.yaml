@@ -1,0 +1,19 @@
+Network: "ethereum"
+
+# logs/
+ETLJobType: "transactions"
+
+RPCEndpoints:
+  - "http://127.0.0.1:8545/"
+  - "wss://127.0.0.1:8545/"
+
+# -1 for latest block and sync data from nodes continuously
+ETLRangeFrom: 1
+ETLRangeTo: -1
+
+# MYSQL/CLICKHOUSE/POSTGRES/SNOWFLAKE/SQLITE/TIDB/MONGODB/SPANNER
+DatabaseType: "TIDB"
+DatabaseUser: "root"
+DatabasePassword: "123456"
+DatabaseEndpoints: 
+  - "127.0.0.1:4000"

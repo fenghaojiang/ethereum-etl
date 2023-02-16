@@ -1,39 +1,79 @@
 package common
 
 import (
+	"fmt"
 	"sync"
 
 	"github.com/fenghaojiang/ethereum-etl/common/log"
 	"go.uber.org/zap"
 )
 
-type Job struct {
-	IRunnable
-	JobUniqueKey string
+const (
+	TransactionsJob JobType = "Transactions"
+	LogsJob         JobType = "Logs"
+	ERC20Balance    JobType = "ERC20Balance"
+)
+
+type JobType string
+
+type IJob interface {
+	Start() error
+	Stop() error
+	Restart() error
 }
 
 type JobsManager struct {
-	Jobs map[string]Job
+	Jobs sync.Map
 }
 
 func (jm *JobsManager) StartAllJobs() {
 	var wg sync.WaitGroup
-	wg.Add(len(jm.Jobs))
-	for uniqueKey := range jm.Jobs {
+	jm.Jobs.Range(func(jobID, job any) bool {
+		wg.Add(1)
 		go func(key string) {
 			defer wg.Done()
-			jm.Jobs[key].Start()
+
+			err := job.(IJob).Start()
+			if err != nil {
+				log.Error("failed to start job", zap.String("jobID", key), zap.Error(err))
+				return
+			}
+
 			log.Info("job started", zap.String("jobID", key))
-		}(uniqueKey)
-	}
+		}(jobID.(string))
+		return true
+	})
 	wg.Wait()
-	log.Info("all jobs started", zap.Int("length of jobs", len(jm.Jobs)))
+	log.Info("all jobs started")
 }
 
 func (jm *JobsManager) StopAllJobs() {
-	for uniqueKey := range jm.Jobs {
-		jm.Jobs[uniqueKey].Stop()
-		log.Info("job stopped", zap.String("jobID", uniqueKey))
+	jm.Jobs.Range(func(jobID, job any) bool {
+		err := job.(IJob).Stop()
+		if err != nil {
+			log.Error("failed to stop job", zap.Any("jobID", jobID), zap.Error(err))
+		}
+		return true
+	})
+	log.Info("All jobs stopped")
+}
+
+func (jm *JobsManager) StopJob(jobID string) error {
+	job, ok := jm.Jobs.Load(jobID)
+	if !ok {
+		return fmt.Errorf("job not exist")
 	}
-	log.Info("All jobs stopped", zap.Int("length of jobs", len(jm.Jobs)))
+	return job.(IJob).Stop()
+}
+
+func (jm *JobsManager) StartJob(jobID string) error {
+	job, ok := jm.Jobs.Load(jobID)
+	if !ok {
+		return fmt.Errorf("job not exist")
+	}
+	return job.(IJob).Start()
+}
+
+func (jm *JobsManager) AddJob(jobID string, job IJob) {
+	jm.Jobs.Store(jobID, job)
 }
