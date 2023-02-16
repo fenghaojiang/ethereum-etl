@@ -1,4 +1,4 @@
-package common
+package service
 
 import (
 	"fmt"
@@ -9,9 +9,9 @@ import (
 )
 
 const (
-	TransactionsJob JobType = "Transactions"
-	LogsJob         JobType = "Logs"
-	ERC20Balance    JobType = "ERC20Balance"
+	TransactionsJobType JobType = "Transactions"
+	LogsJobType         JobType = "Logs"
+	ERC20BalanceType    JobType = "ERC20Balance"
 )
 
 type JobType string
@@ -19,8 +19,12 @@ type JobType string
 type IJob interface {
 	Start() error
 	Stop() error
-	Restart() error
 }
+
+const (
+	JobStop    int32 = 0
+	JobRunning int32 = 1
+)
 
 type JobsManager struct {
 	Jobs sync.Map
