@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"fmt"
 	"sync/atomic"
 
@@ -11,13 +12,14 @@ var _ service.IJob = (*LogsJob)(nil)
 
 type LogsJob struct {
 	jobRunning int32
-	steps      int32
+	ctx        context.Context
+	batchSize  int32
 	cursor     uint64
 	limitChan  chan struct{}
 }
 
-func NewLogsJob() service.IJob {
-
+func NewLogsJob(ctx context.Context) service.IJob {
+	return &LogsJob{}
 }
 
 func (j *LogsJob) Start() error {
