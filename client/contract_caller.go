@@ -54,5 +54,7 @@ func (e *EthereumClient) CodeAt(ctx context.Context, contract common.Address, bl
 }
 
 func (e *EthereumClient) CallContract(ctx context.Context, call ethereum.CallMsg, blockNumber *big.Int) ([]byte, error) {
+
+	// TODO
 	return nil, nil
 }
