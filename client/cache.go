@@ -2,9 +2,11 @@ package client
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/allegro/bigcache/v3"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 func newBigCacheWithDefaultConfig(ctx context.Context) (*bigcache.BigCache, error) {
@@ -49,4 +51,13 @@ func newBigCacheWithDefaultConfig(ctx context.Context) (*bigcache.BigCache, erro
 		return nil, err
 	}
 	return c, nil
+}
+
+func (e *EthereumClient) cacheCode(contract common.Address) ([]byte, error) {
+	return e.networkContractCodeCache.Get(strings.ToLower(contract.String()))
+}
+
+// save contract in cache
+func (e *EthereumClient) saveContract(contract common.Address, code []byte) error {
+	return e.networkContractCodeCache.Set(strings.ToLower(contract.String()), code)
 }

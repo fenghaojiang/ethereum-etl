@@ -11,24 +11,30 @@ var _ service.IJob = (*LogsJob)(nil)
 
 type LogsJob struct {
 	jobRunning int32
+	steps      int32
+	cursor     uint64
+	limitChan  chan struct{}
 }
 
-func (l *LogsJob) Start() error {
-	if atomic.LoadInt32(&l.jobRunning) == service.JobStop {
+func NewLogsJob() service.IJob {
 
-		//TODO Start Job
-		atomic.StoreInt32(&l.jobRunning, service.JobRunning)
+}
+
+func (j *LogsJob) Start() error {
+	if atomic.LoadInt32(&j.jobRunning) == service.JobStop {
+
+		atomic.StoreInt32(&j.jobRunning, service.JobRunning)
 		return nil
 	}
 	return fmt.Errorf("job started once")
 }
 
-func (l *LogsJob) Stop() error {
-	if atomic.LoadInt32(&l.jobRunning) == service.JobStop {
+func (j *LogsJob) Stop() error {
+	if atomic.LoadInt32(&j.jobRunning) == service.JobStop {
 		return fmt.Errorf("job already stopped once")
 	}
 
 	// TODO Job Stop Job
-	atomic.StoreInt32(&l.jobRunning, service.JobStop)
+	atomic.StoreInt32(&j.jobRunning, service.JobStop)
 	return nil
 }
