@@ -1,6 +1,6 @@
 ## Ethereum-ETL
 
-Ethereum-ETL is a tool to help to finish the ETL job with EVM-like block chain.  
+Ethereum-ETL is a ETL tool to sync data with EVM-like block chain.  
 You can configure the destination endpoints like `MySQL`/`Postgresql`/`MongoDB`/`TiDB`.  
 
 ### 
@@ -9,4 +9,13 @@ You can configure the destination endpoints like `MySQL`/`Postgresql`/`MongoDB`/
 [![GoReportCard](https://goreportcard.com/badge/github.com/fenghaojiang/ethereum-etl)](https://goreportcard.com/report/github.com/fenghaojiang/ethereum-etl)
 
 
+### Goals  
 
+This project aims to solve the pain points and difficulties encountered when pulling data from EVM-based public chains such as Ethereum for ETL purposes, helping users synchronize on-chain data and supporting data synchronization to various types of databases such as OLAP/OLTP/HTAP.  
+
+#### Key Features 
+
+- Resolving [reorg issue](https://www.alchemy.com/overviews/what-is-a-reorg) - when reorg occurs, the data already consumed by the database will be corrected/modified.
+- Real-time updates - users can obtain the latest data.
+- Provide blazing-fast solution to synchronize data.
+- Support for multiple databases to meet users' various scenario requirements.
