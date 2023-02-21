@@ -1,12 +1,13 @@
 package model
 
 type ERC20Transfer struct {
-	BlockNumber     uint64
-	Timestamp       int64
-	BlockHash       string
-	TxHash          string
-	ContractAddress string
-	From            string
-	To              string
-	Value           string
+	UniqueKey       string `gorm:"column:uniqueKey"`
+	BlockNumber     uint64 `gorm:"column:blockNumber"`
+	Timestamp       int64  `gorm:"column:timestamp"`
+	BlockHash       string `gorm:"column:blockHash"`
+	TxHash          string `gorm:"column:txHash"`
+	ContractAddress string `gorm:"column:contractAddress"`
+	From            string `gorm:"column:from"`
+	To              string `gorm:"column:to"`
+	Value           string `gorm:"column:value"`
 }
