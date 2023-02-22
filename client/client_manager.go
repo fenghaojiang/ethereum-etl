@@ -1,6 +1,9 @@
 package client
 
-import "sync"
+import (
+	"fmt"
+	"sync"
+)
 
 type ClientManager struct {
 	NetworkClients sync.Map
@@ -20,4 +23,16 @@ func NewClientManager() *ClientManager {
 	return &ClientManager{
 		NetworkClients: sync.Map{},
 	}
+}
+
+func (cm *ClientManager) NetworkClient(network Network) (*EthereumClient, error) {
+	c, ok := cm.NetworkClients.Load(network)
+	if !ok {
+		return nil, fmt.Errorf("network client not exists in client manager")
+	}
+	return c.(*EthereumClient), nil
+}
+
+func (cm *ClientManager) AddNetworkClient(network Network, e *EthereumClient) {
+	cm.NetworkClients.Store(network, e)
 }
