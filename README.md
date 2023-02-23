@@ -9,6 +9,11 @@ You can configure the destination endpoints like `MySQL` / `Postgresql` / `Mongo
 [![GoReportCard](https://goreportcard.com/badge/github.com/fenghaojiang/ethereum-etl)](https://goreportcard.com/report/github.com/fenghaojiang/ethereum-etl)
 
 
+![process](./images/process.png)
+
+
+
+
 ### Goals  
 
 This project aims to solve the pain points and difficulties encountered when pulling data from EVM-based public chains such as Ethereum for ETL purposes, helping users synchronize on-chain data and supporting data synchronization to various types of databases such as OLAP/OLTP/HTAP.  
