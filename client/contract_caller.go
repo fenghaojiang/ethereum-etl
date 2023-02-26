@@ -51,6 +51,22 @@ func (e *EthereumClient) CodeAt(ctx context.Context, contract common.Address, bl
 }
 
 func (e *EthereumClient) CallContract(ctx context.Context, call ethereum.CallMsg, blockNumber *big.Int) ([]byte, error) {
-
-	return nil, nil
+	var result []byte
+	err := etlcommon.Retry(e.maxRetries, e.timeout, func() error {
+		c := e.Client()
+		if c == nil {
+			return fmt.Errorf("no clients available")
+		}
+		err := c.CallContext(ctx, &result, "eth_call", call, hexutil.EncodeBig(blockNumber))
+		if err != nil {
+			log.Error("failed to call contract with method eth_call", zap.Any("callMsg", call), zap.Error(err))
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		log.Error("call contract reach max retries", zap.Error(err))
+		return nil, err
+	}
+	return result, nil
 }

@@ -7,7 +7,7 @@ type Transaction struct {
 	BlockHash       string `gorm:"column:blockHash"`
 	TxHash          string `gorm:"column:txHash"`
 	ContractAddress string `gorm:"column:contractAddress"`
-	From            string
-	To              string
-	Value           string
+	From            string `gorm:"column:from"`
+	To              string `gorm:"column:to"`
+	Value           string `gorm:"column:value"`
 }
