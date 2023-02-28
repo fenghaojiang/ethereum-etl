@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"sync/atomic"
 
+	"github.com/ethereum/go-ethereum"
 	"github.com/fenghaojiang/ethereum-etl/service"
 )
 
@@ -12,14 +13,14 @@ var _ service.IJob = (*LogsJob)(nil)
 
 type LogsJob struct {
 	jobRunning int32
-	ctx        context.Context
-	batchSize  int32
-	cursor     uint64
-	limitChan  chan struct{}
+	topics     ethereum.FilterQuery
 }
 
-func NewLogsJob(ctx context.Context) service.IJob {
-	return &LogsJob{}
+func NewLogsJob(ctx context.Context, topics ethereum.FilterQuery) service.IJob {
+	return &LogsJob{
+		jobRunning: 0,
+		topics:     topics,
+	}
 }
 
 func (j *LogsJob) Start() error {

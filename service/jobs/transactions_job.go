@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"sync/atomic"
 
+	"github.com/fenghaojiang/ethereum-etl/common/log"
 	"github.com/fenghaojiang/ethereum-etl/model"
 	"github.com/fenghaojiang/ethereum-etl/service"
 )
@@ -51,6 +52,7 @@ func (j *TransactionJob) Run() {
 		select {
 		case _, ok := <-resultChan:
 			if !ok {
+				log.Warn("tx result channel close")
 				return
 			}
 

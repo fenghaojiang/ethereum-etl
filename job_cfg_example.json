@@ -1,0 +1,23 @@
+{
+    "jobs": [
+      {
+        "jobID": 1, 
+        "network":"ethereum",
+        "ETLJobType":"transactions",
+        "RPCEndpoints": [
+          "http://127.0.0.1:8545",
+          "wss://127.0.0.1:8545"
+        ],
+        "blockRange": {
+          "from": 1, 
+          "to": -1
+        },
+        "database":{
+          "type":"TIDB",
+          "user":"root",
+          "password":"123456",
+          "endpoint":"127.0.0.1:4000"
+        }
+      }
+    ]
+  }

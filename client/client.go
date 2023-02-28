@@ -28,7 +28,6 @@ func NewEthereumClient() *EthereumClient {
 	if err != nil {
 		log.Fatal("failed to new bigcache for contract code", zap.Error(err))
 	}
-
 	return &EthereumClient{
 		networkContractCodeCache: contractCodeCache,
 	}
