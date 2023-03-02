@@ -41,3 +41,8 @@ func (j *LogsJob) Stop() error {
 	atomic.StoreInt32(&j.jobRunning, service.JobStop)
 	return nil
 }
+
+func (j *LogsJob) Done() <-chan struct{} {
+	//TODO
+	return nil
+}

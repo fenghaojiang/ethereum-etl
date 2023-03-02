@@ -10,6 +10,8 @@ import (
 	"github.com/allegro/bigcache/v3"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/fenghaojiang/ethereum-etl/common"
+	"github.com/fenghaojiang/ethereum-etl/model"
 	"go.uber.org/zap"
 )
 
@@ -19,6 +21,7 @@ type EthereumClient struct {
 	blacklistContracts       sync.Map
 	maxRetries               uint64
 	timeout                  time.Duration
+	queue                    *common.Queue[model.BlockBrief]
 }
 
 var _ bind.ContractCaller = (*EthereumClient)(nil)
@@ -30,6 +33,7 @@ func NewEthereumClient() *EthereumClient {
 	}
 	return &EthereumClient{
 		networkContractCodeCache: contractCodeCache,
+		queue:                    common.NewQueue[model.BlockBrief](),
 	}
 }
 

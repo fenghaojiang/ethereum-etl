@@ -55,7 +55,6 @@ func (j *TransactionJob) Run() {
 				log.Warn("tx result channel close")
 				return
 			}
-
 			//TODO batch write txns
 		case <-j.ctx.Done():
 
@@ -66,4 +65,10 @@ func (j *TransactionJob) Run() {
 
 func (j *TransactionJob) rpcRequest(outChan chan<- []model.Transaction) {
 
+}
+
+func (j *TransactionJob) Done() <-chan struct{} {
+
+	//TODO
+	return nil
 }

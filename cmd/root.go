@@ -10,6 +10,7 @@ func NewRootCmd() *cobra.Command {
 		Use:   "ethereum-etl",
 		Short: "ethereum block chain etl tool by fenghaojiang",
 	}
+
 	rootCmd.AddCommand(newEthereumETLCmd())
 	return rootCmd
 }

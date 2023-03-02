@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/json"
 	"os"
+	"sync"
 
 	"github.com/fenghaojiang/ethereum-etl/common/log"
 	"github.com/tidwall/gjson"
@@ -30,6 +31,15 @@ type DatabaseConf struct {
 	Endpoint string `json:"endpoint"`
 }
 
+var globalConfs []JobConf
+var globalConfsMu sync.RWMutex
+
+func GlobalConfs() []JobConf {
+	globalConfsMu.RLock()
+	defer globalConfsMu.RUnlock()
+	return globalConfs
+}
+
 func LoadConfig(path string) ([]JobConf, error) {
 	content, err := os.ReadFile(path)
 	if err != nil {
@@ -45,5 +55,8 @@ func LoadConfig(path string) ([]JobConf, error) {
 			zap.Error(err))
 		return nil, err
 	}
+	globalConfsMu.Lock()
+	globalConfs = jobs
+	globalConfsMu.Unlock()
 	return jobs, nil
 }
