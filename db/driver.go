@@ -33,7 +33,7 @@ const (
 type DriverConfig struct {
 }
 
-type driverFunc func(DriverConfig) Driver
+type driverFunc func(DriverConfig) IDriver
 
 // ConnectionConfig is the configuration for connections.
 type ConnectionConfig struct {
@@ -53,11 +53,11 @@ type ConnectionConfig struct {
 	AuthenticationDatabase string
 }
 
-type Driver interface {
+type IDriver interface {
 	Ping(ctx context.Context) error
 
 	Close(ctx context.Context) error
-	Open(ctx context.Context, dbType DBType, connectionConfig ConnectionConfig) (Driver, error)
+	Open(ctx context.Context, dbType DBType, connectionConfig ConnectionConfig) (IDriver, error)
 
 	GetConnection(ctx context.Context, database string) (*sql.DB, error)
 }
