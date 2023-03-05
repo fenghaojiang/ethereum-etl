@@ -60,4 +60,6 @@ type IDriver interface {
 	Open(ctx context.Context, dbType DBType, connectionConfig ConnectionConfig) (IDriver, error)
 
 	GetConnection(ctx context.Context, database string) (*sql.DB, error)
+
+	Execute(ctx context.Context, statement string) (int64, error)
 }

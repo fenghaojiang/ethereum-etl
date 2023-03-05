@@ -29,3 +29,8 @@ func (d *Driver) Open(ctx context.Context, dbType db.DBType, connectionConfig db
 func (d *Driver) GetConnection(ctx context.Context, database string) (*sql.DB, error) {
 	return nil, nil
 }
+
+func (d *Driver) Execute(ctx context.Context, statement string) (int64, error) {
+	//TODO
+	return 0, nil
+}
